@@ -1,16 +1,21 @@
 import { useEffect, useRef } from "react";
 
-const COLORS = ["#3B82F6", "#8B5CF6", "#06B6D4"];
+const DARK_COLORS = ["#3B82F6", "#8B5CF6", "#06B6D4"];
+const LIGHT_COLORS = ["#2563EB", "#7C3AED", "#0891B2"];
 
 export default function ParticlesBackground() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     let animationId;
     let particles;
     const mouse = { x: null, y: null, radius: 120 };
+
+    const isLight = document.documentElement.classList.contains("light");
+    const activeColors = isLight ? LIGHT_COLORS : DARK_COLORS;
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
@@ -33,12 +38,13 @@ export default function ParticlesBackground() {
         vx: (Math.random() - 0.5) * 0.3,
         vy: (Math.random() - 0.5) * 0.3,
         r: Math.random() * 1.6 + 0.6,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        color: activeColors[Math.floor(Math.random() * activeColors.length)],
       }));
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      const isCurrentlyLight = document.documentElement.classList.contains("light");
 
       particles.forEach((p) => {
         p.x += p.vx;
@@ -61,11 +67,14 @@ export default function ParticlesBackground() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = 0.7;
+        ctx.globalAlpha = isCurrentlyLight ? 0.35 : 0.7;
         ctx.fill();
       });
 
       ctx.globalAlpha = 1;
+      const strokeColor = isCurrentlyLight ? "99, 102, 241" : "139, 92, 246";
+      const opacityMultiplier = isCurrentlyLight ? 0.25 : 1;
+
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i];
@@ -77,7 +86,7 @@ export default function ParticlesBackground() {
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${1 - dist / 110})`;
+            ctx.strokeStyle = `rgba(${strokeColor}, ${(1 - dist / 110) * opacityMultiplier})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -104,12 +113,11 @@ export default function ParticlesBackground() {
     if (!prefersReducedMotion) {
       draw();
     } else {
-      // Draw a single static frame for reduced-motion users
       particles.forEach((p) => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = 0.5;
+        ctx.globalAlpha = 0.4;
         ctx.fill();
       });
     }
@@ -131,7 +139,7 @@ export default function ParticlesBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 h-full w-full opacity-60"
+      className="absolute inset-0 h-full w-full opacity-50 dark:opacity-60"
       aria-hidden="true"
     />
   );

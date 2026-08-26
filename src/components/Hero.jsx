@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Mail, ChevronDown, Sparkles } from "lucide-react";
 import { profile, stats } from "../data/portfolioData";
+import { useLanguage } from "../context/LanguageContext";
 import BlobBackground from "./BlobBackground";
 import ParticlesBackground from "./ParticlesBackground";
 
@@ -11,6 +12,7 @@ function useTypewriter(words, { typingSpeed = 90, deletingSpeed = 45, pause = 14
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    if (!words || words.length === 0) return;
     const current = words[index % words.length];
     let timeout;
 
@@ -51,7 +53,7 @@ function Counter({ value, suffix }) {
   }, [value]);
 
   return (
-    <span className="font-display text-3xl font-bold text-white sm:text-4xl">
+    <span className="font-display text-3xl font-bold text-white dark:text-white light:text-slate-900 sm:text-4xl">
       {display}
       {suffix}
     </span>
@@ -59,7 +61,8 @@ function Counter({ value, suffix }) {
 }
 
 export default function Hero() {
-  const typed = useTypewriter(profile.roles);
+  const { t } = useLanguage();
+  const typed = useTypewriter(t.hero.roles || profile.roles);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -76,6 +79,13 @@ export default function Hero() {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const statLabels = [
+    t.hero.stats.years,
+    t.hero.stats.projects,
+    t.hero.stats.tech,
+    t.hero.stats.lines,
+  ];
+
   return (
     <section
       id="home"
@@ -91,19 +101,19 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/70"
+            className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80 dark:text-white/80 light:text-slate-800"
           >
             <Sparkles size={14} className="text-accent" />
-            Available for freelance &amp; collab projects
+            {t.hero.badge}
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-display text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl"
+            className="font-display text-4xl font-bold leading-[1.08] tracking-tight text-white dark:text-white light:text-slate-900 sm:text-5xl md:text-6xl"
           >
-            Hi, I'm{" "}
+            {t.hero.greeting}{" "}
             <span className="text-gradient bg-[length:200%_auto] animate-gradient-x">
               {profile.name}
             </span>
@@ -113,9 +123,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
-            className="mt-4 flex h-9 items-center font-mono text-lg text-white/80 sm:text-xl"
+            className="mt-4 flex h-9 items-center font-mono text-lg text-white/80 dark:text-white/80 light:text-slate-700 sm:text-xl"
           >
-            <span className="mr-2 text-accent">&gt;</span>
+            <span className="mr-2 text-accent">{t.hero.rolePrefix}</span>
             {typed}
             <span className="ml-1 inline-block h-5 w-[2px] animate-blink bg-accent" />
           </motion.div>
@@ -124,11 +134,9 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg"
+            className="mt-6 max-w-xl text-base leading-relaxed text-white/60 dark:text-white/60 light:text-slate-600 sm:text-lg"
           >
-            14-year-old frontend developer from Tashkent, Uzbekistan, building
-            fast, responsive, and beautiful interfaces with React &amp;
-            modern web tools — one project at a time.
+            {t.hero.bio}
           </motion.p>
 
           <motion.div
@@ -139,17 +147,17 @@ export default function Hero() {
           >
             <button
               onClick={() => scrollTo("#projects")}
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary via-secondary to-accent bg-[length:200%_auto] px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:bg-right hover:shadow-glow-purple"
+              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary via-secondary to-accent bg-[length:200%_auto] px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:bg-right hover:shadow-glow-purple focus-ring"
             >
-              View Projects
+              {t.hero.viewProjects}
               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             </button>
             <button
               onClick={() => scrollTo("#contact")}
-              className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white/90 transition-all duration-300 hover:border-accent/50 hover:text-white"
+              className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white/90 dark:text-white/90 light:text-slate-900 transition-all duration-300 hover:border-accent/50 focus-ring"
             >
               <Mail size={16} />
-              Contact Me
+              {t.hero.contactMe}
             </button>
           </motion.div>
 
@@ -159,18 +167,18 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4"
           >
-            {stats.map((s) => (
-              <div key={s.label} className="glass rounded-2xl px-4 py-4 text-center">
+            {stats.map((s, idx) => (
+              <div key={s.label} className="glass-card rounded-2xl px-4 py-4 text-center">
                 <Counter value={s.value} suffix={s.suffix} />
-                <p className="mt-1 text-[11px] uppercase tracking-wider text-white/40">
-                  {s.label}
+                <p className="mt-1 text-[11px] uppercase tracking-wider text-white/50 dark:text-white/50 light:text-slate-500 font-mono">
+                  {statLabels[idx] || s.label}
                 </p>
               </div>
             ))}
           </motion.div>
         </div>
 
-        {/* Image column */}
+        {/* Image / Avatar column */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -191,40 +199,40 @@ export default function Hero() {
           >
             <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-primary via-secondary to-accent opacity-30 blur-2xl" />
             <div className="gradient-border glass-strong relative aspect-square overflow-hidden rounded-[2.5rem] p-2">
-              <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-base-900 to-base-800">
+              <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-base-900 to-base-800 dark:from-base-900 dark:to-base-800 light:from-slate-100 light:to-slate-200">
                 <div className="flex h-full w-full items-center justify-center">
                   <span className="font-display text-8xl font-bold text-gradient">
                     RI
                   </span>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-base-950/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-base-950/80 via-transparent to-transparent dark:from-base-950/80 light:from-white/40" />
               </div>
             </div>
 
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="pointer-events-none absolute -inset-8 rounded-full border border-dashed border-white/10"
+              className="pointer-events-none absolute -inset-8 rounded-full border border-dashed border-white/10 dark:border-white/10 light:border-slate-300"
             />
 
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="glass absolute -left-8 top-8 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 shadow-lg"
+              className="glass absolute -left-8 top-8 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 dark:text-white/80 light:text-slate-800 shadow-lg"
             >
               ⚛️ React.js
             </motion.div>
             <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="glass absolute -right-6 top-1/2 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 shadow-lg"
+              className="glass absolute -right-6 top-1/2 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 dark:text-white/80 light:text-slate-800 shadow-lg"
             >
               🎨 Tailwind
             </motion.div>
             <motion.div
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-              className="glass absolute -bottom-4 left-10 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 shadow-lg"
+              className="glass absolute -bottom-4 left-10 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 dark:text-white/80 light:text-slate-800 shadow-lg"
             >
               🤖 AI Tools
             </motion.div>
@@ -237,7 +245,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-white/40 transition-colors hover:text-white"
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-white/40 dark:text-white/40 light:text-slate-400 transition-colors hover:text-white focus-ring"
         aria-label="Scroll to About section"
       >
         <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity }}>
