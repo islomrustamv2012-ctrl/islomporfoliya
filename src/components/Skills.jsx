@@ -54,7 +54,6 @@ export default function Skills() {
           </div>
         </motion.div>
 
-        {/* Skills Grid */}
         <motion.div layout className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <AnimatePresence>
             {filteredSkills.map((skill, i) => (

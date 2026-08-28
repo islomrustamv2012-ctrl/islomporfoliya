@@ -12,23 +12,13 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
 import AIChatWidget from "./components/AIChatWidget";
+import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 
-function AppContent() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
-
+function PortfolioApp() {
   return (
     <div className="relative min-h-screen transition-colors duration-300">
-      <LoadingScreen show={loading} />
-      <CustomCursor />
       <Navbar />
       <main>
         <Hero />
@@ -43,6 +33,37 @@ function AppContent() {
       <BackToTop />
       <AIChatWidget />
     </div>
+  );
+}
+
+function AppContent() {
+  const [loading, setLoading] = useState(true);
+  const [currentPath, setCurrentPath] = useState(
+    typeof window !== "undefined" ? window.location.pathname : "/"
+  );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+
+    const syncPath = () => setCurrentPath(window.location.pathname);
+    window.addEventListener("popstate", syncPath);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("popstate", syncPath);
+    };
+  }, []);
+
+  const isUnknownRoute = currentPath !== "/" && currentPath !== "";
+
+  return (
+    <>
+      <LoadingScreen show={loading} />
+      <CustomCursor />
+      {isUnknownRoute ? <NotFound /> : <PortfolioApp />}
+    </>
   );
 }
 
