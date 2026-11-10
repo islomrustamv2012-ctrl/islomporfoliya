@@ -1,296 +1,227 @@
 export const profile = {
-  name: "Rustamov Islom",
+  name: "Islom Rustamov",
   firstName: "Islom",
   title: "Frontend Developer | React Developer | AI Enthusiast",
   roles: [
-    "React Developer",
     "Frontend Developer",
-    "JavaScript Developer",
+    "React Developer",
+    "Modern Web Technologies",
     "AI Enthusiast",
   ],
   location: "Tashkent, Uzbekistan",
-  email: "islom.rustamov.dev@gmail.com",
-  phone: "+998 90 010 66 53",
-  about:
-    "I am Rustamov Islom, a 14-year-old frontend developer from Tashkent, Uzbekistan. Passionate about web performance, UI/UX perfection, glassmorphism design systems, and AI-assisted development. I build fast, accessible, and delightful digital experiences using React, JavaScript, and Tailwind CSS.",
-  resumeNote:
-    "Constantly pushing boundaries by building real-world projects, mastering state management, and staying ahead with modern AI tools.",
+  email: "islom.rustamov.dev@gmail.com", // [Editable placeholder / direct contact]
+  phone: "+998 90 010 66 53", // [Direct contact placeholder]
+  heroIntro:
+    "I build modern, interactive and visually stunning digital experiences with clean code and creative ideas.",
+  bio:
+    "I am Islom Rustamov, a frontend developer based in Tashkent, Uzbekistan, specializing in React.js and modern web technologies. I am fascinated by the intersection of high-performance frontend engineering, AI tools, and creative UI/UX design. I focus on writing clean, modular code and crafting digital experiences that feel intuitive, futuristic, and memorable.",
+  interests: ["AI & Machine Learning", "Modern Web Technologies", "UI/UX Design", "3D Web & Creative Code"],
+  currentFocus: "Architecting interactive 3D web interfaces, mastering modern React design patterns, and integrating AI workflows into frontend development.",
 };
 
-export const stats = [
-  { label: "Years Coding", value: 2, suffix: "+" },
-  { label: "Projects Built", value: 8, suffix: "" },
-  { label: "Technologies", value: 8, suffix: "+" },
-  { label: "Lines Shipped", value: 20, suffix: "K+" },
-];
-
-export const skills = [
-  { name: "React.js", level: 88, category: "Frontend Core", color: "#61DAFB" },
-  { name: "JavaScript (ES6+)", level: 90, category: "Frontend Core", color: "#F7DF1E" },
-  { name: "HTML5 & Semantic Markup", level: 96, category: "Frontend Core", color: "#E34F26" },
-  { name: "CSS3 & Animations", level: 94, category: "Styling & UI", color: "#3B82F6" },
-  { name: "Tailwind CSS", level: 92, category: "Styling & UI", color: "#06B6D4" },
-  { name: "Framer Motion", level: 85, category: "Styling & UI", color: "#EC4899" },
-  { name: "AI Coding Tools", level: 88, category: "Tools & AI", color: "#8B5CF6" },
-  { name: "Git & GitHub", level: 80, category: "Tools & AI", color: "#F1502F" },
-  { name: "Responsive & Accessibility", level: 95, category: "Frontend Core", color: "#22D3EE" },
-  { name: "Vite & Build Tools", level: 84, category: "Tools & AI", color: "#A78BFA" },
-];
+export const skillsData = {
+  frontend: [
+    { name: "React.js", category: "Frontend", highlight: true },
+    { name: "JavaScript", category: "Frontend", highlight: true },
+    { name: "Tailwind CSS", category: "Frontend", highlight: true },
+    { name: "HTML5", category: "Frontend", highlight: false },
+    { name: "CSS3", category: "Frontend", highlight: false },
+    { name: "Responsive Web Design", category: "Frontend", highlight: true },
+  ],
+  tools: [
+    { name: "Git", category: "Tools", highlight: true },
+    { name: "GitHub", category: "Tools", highlight: true },
+    { name: "VS Code", category: "Tools", highlight: false },
+    { name: "Vite", category: "Tools", highlight: false },
+  ],
+  interests: [
+    { name: "AI Tools", category: "Interests", highlight: true },
+    { name: "UI/UX Design", category: "Interests", highlight: true },
+    { name: "Modern Web Technologies", category: "Interests", highlight: true },
+    { name: "3D & Interactive Web", category: "Interests", highlight: false },
+  ],
+};
 
 export const timeline = [
   {
-    year: "2024",
-    title: "First line of code",
+    period: "2024",
+    title: "First Steps in Web Development",
     description:
-      "Started learning HTML & CSS out of pure curiosity about how websites work, instantly hooked on UI development.",
+      "Started learning semantic HTML5 and responsive CSS3, laying the foundational knowledge for frontend design and layout architecture.",
   },
   {
-    year: "2025",
-    title: "Mastered JavaScript & React",
+    period: "2025",
+    title: "JavaScript & React Mastery",
     description:
-      "Transitioned from static layouts to rich dynamic web applications using React.js and modern state patterns.",
+      "Transitioned into deep JavaScript ES6+ and React component architecture, building dynamic state-driven user interfaces.",
   },
   {
-    year: "2025",
-    title: "Shipped 8+ Real Projects",
+    period: "2025",
+    title: "Building Real-World Web Apps",
     description:
-      "Built e-commerce storefronts, food truck apps, and productivity tools, mastering Tailwind CSS & Framer Motion.",
+      "Engineered full frontend products including Toystore, Foodtruck, Time, and Texlogiya, honing Tailwind CSS and responsive design.",
   },
   {
-    year: "2026",
-    title: "Mars Hackathon Top 1 Winner",
+    period: "2026",
+    title: "Mars Hackathon Participant (Top 1 Sertifikat)",
     description:
-      "Awarded 1st Place Sertifikat in Mars Hackathon August 2026 selection stage for outstanding React & UI engineering.",
+      "Recognized with 1st Place Sertifikat in the Mars Hackathon selection stage for outstanding frontend execution and UI design.",
   },
   {
-    year: "Now",
-    title: "Open for Opportunities",
+    period: "Current",
+    title: "Next-Gen Web & AI Exploration",
     description:
-      "Continuously refining performance, component architecture, and looking for exciting frontend projects.",
+      "Advancing skills in interactive 3D web interfaces (Three.js), AI coding tools, and modern UI/UX design systems.",
   },
 ];
 
 export const projects = [
   {
-    id: 1,
-    title: "ToyStore E-Commerce",
+    id: "toystore",
+    title: "Toystore",
     category: "E-Commerce",
-    featured: true,
+    badge: "Featured Project",
     description:
-      "A colorful, modern e-commerce storefront for a toy store featuring dynamic category navigation, instant product search, animated cart drawer, and responsive checkout flow.",
+      "A vibrant, modern e-commerce storefront for a toy retailer featuring dynamic category filtering, interactive shopping cart, instant search, and smooth micro-interactions.",
+    longDescription:
+      "Toystore was designed to provide an energetic and seamless digital shopping experience. Built with React and Tailwind CSS, it features dynamic product catalogs, a slide-out cart drawer with real-time state calculations, and mobile-first responsive layouts.",
     highlights: [
-      "Dynamic product filtering and category tab switching",
-      "Interactive cart drawer with subtotal calculations",
-      "Framer Motion micro-interactions & badge animations",
-      "Mobile-optimized touch targets & WCAG compliant contrast",
+      "Dynamic catalog filtering and instant search bar",
+      "Interactive cart drawer with subtotal computation",
+      "Framer Motion micro-animations & responsive touch targets",
+      "Clean component structure and accessibility considerations",
     ],
-    image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=800&q=80",
-    icon: "Gift",
-    gradient: ["#F97316", "#EC4899"],
-    tech: ["React", "Tailwind CSS", "JavaScript", "Framer Motion"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
+    tech: ["React.js", "Tailwind CSS", "JavaScript", "Framer Motion"],
+    demoUrl: "https://example.com/toystore-demo", // [Editable placeholder]
+    githubUrl: "https://github.com/rustamov-islom/toystore", // [Editable placeholder]
+    image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=1000&q=80",
+    gradient: "from-cyan-500/20 to-blue-600/20",
+    accentColor: "#00E5FF",
   },
   {
-    id: 2,
-    title: "Food Truck Street Brand",
+    id: "foodtruck",
+    title: "Foodtruck",
     category: "Web Apps",
-    featured: true,
+    badge: "Interactive Brand",
     description:
-      "A vibrant landing page for a street-food truck brand with interactive menu filters, photo gallery, location tracking UI, and online order reservation modal.",
+      "An appetizing street-food brand web experience with interactive menu showcase, dietary filter tags, location tracking UI, and online order reservation.",
+    longDescription:
+      "Foodtruck presents a bold culinary brand with high-contrast typography, interactive food menus, dietary tag filters, and an online table reservation modal. Built for quick mobile browsing and visual delight.",
     highlights: [
-      "Menu section with dietary & spice level filter tags",
-      "Interactive location map & live open status pill",
-      "Glassmorphic card design with subtle hover elevation",
-      "Seamless responsive grid layout across all screen sizes",
+      "Menu category switcher with dietary and spice level filters",
+      "Interactive location & opening schedule indicator",
+      "Glassmorphic design system with subtle hover elevation",
+      "Seamless responsive grid across mobile and desktop displays",
     ],
-    image: "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?auto=format&fit=crop&w=800&q=80",
-    icon: "Truck",
-    gradient: ["#F59E0B", "#EF4444"],
-    tech: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
+    tech: ["React.js", "Tailwind CSS", "JavaScript", "Responsive Design"],
+    demoUrl: "https://example.com/foodtruck-demo", // [Editable placeholder]
+    githubUrl: "https://github.com/rustamov-islom/foodtruck", // [Editable placeholder]
+    image: "https://images.unsplash.com/photo-1565123409695-7b5ef63a2efb?auto=format&fit=crop&w=1000&q=80",
+    gradient: "from-amber-500/20 to-red-600/20",
+    accentColor: "#F59E0B",
   },
   {
-    id: 3,
-    title: "Time Studio App",
+    id: "time",
+    title: "Time",
     category: "Tools",
-    featured: false,
+    badge: "Productivity",
     description:
-      "A sleek world clock, stopwatch, and pomodoro timer app built with a clean dark interface, audio cues, and distraction-free layout.",
+      "A sleek dark-mode productivity studio featuring a world clock, precision stopwatch with lap history, and distraction-free Pomodoro focus timer.",
+    longDescription:
+      "Time is a minimalist web utility focused on temporal productivity. It features world clock monitors, a high-precision stopwatch with millisecond fidelity and lap tracking, and a Pomodoro focus timer designed with futuristic midnight visuals.",
     highlights: [
-      "Multiple time zones with live digital clock updates",
-      "Precision stopwatch with lap recording functionality",
-      "Distraction-free dark mode with cyan accent glow",
+      "Live time-zone clock updates and visual timezone cards",
+      "Precision stopwatch with lap recording and reset controls",
+      "Pomodoro focus session timer with audio cues",
+      "Distraction-free dark mode interface with electric cyan glow",
     ],
-    image: "https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&w=800&q=80",
-    icon: "Clock",
-    gradient: ["#3B82F6", "#06B6D4"],
-    tech: ["JavaScript", "CSS3", "HTML5", "Local Storage"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
+    tech: ["JavaScript", "React.js", "CSS3", "Local Storage"],
+    demoUrl: "https://example.com/time-demo", // [Editable placeholder]
+    githubUrl: "https://github.com/rustamov-islom/time", // [Editable placeholder]
+    image: "https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&w=1000&q=80",
+    gradient: "from-cyan-500/20 to-purple-600/20",
+    accentColor: "#00E5FF",
   },
   {
-    id: 4,
-    title: "Nexus Tech Platform",
+    id: "texlogiya",
+    title: "Texlogiya",
     category: "Web Apps",
-    featured: false,
+    badge: "Tech Platform",
     description:
-      "A modern SaaS technology landing page featuring interactive feature cards, pricing toggle, scroll-triggered animations, and live hero statistics.",
+      "A futuristic IT and tech industry showcase portal featuring interactive service modules, tech news highlights, and smooth scroll animations.",
+    longDescription:
+      "Texlogiya is a modern technology hub presenting cutting-edge tech articles, software insights, and interactive service modules. Styled with cyber aesthetics and Bento Grid layouts.",
     highlights: [
-      "Monthly vs Annual pricing toggle with discount badge",
-      "Scroll reveal animations powered by Framer Motion",
-      "Clean Bento Grid structure for feature showcases",
+      "Bento Grid architecture for modern feature highlights",
+      "Interactive category tabs for technology topics",
+      "Performance-optimized responsive layout with zero layout shifts",
+      "Modern typography and neon glassmorphism accents",
     ],
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
-    icon: "Cpu",
-    gradient: ["#8B5CF6", "#3B82F6"],
-    tech: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
-  },
-  {
-    id: 5,
-    title: "Developer Portfolio V1",
-    category: "Web Apps",
-    featured: false,
-    description:
-      "An earlier portfolio iteration showcasing clean typography, dark theme styling, project showcases, and custom contact section.",
-    highlights: [
-      "Custom cursor tracker and smooth scroll navigation",
-      "Minimalist dark aesthetics with high contrast text",
-    ],
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    icon: "UserRound",
-    gradient: ["#06B6D4", "#8B5CF6"],
-    tech: ["React", "CSS3", "JavaScript"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
-  },
-  {
-    id: 6,
-    title: "Live Weather Dashboard",
-    category: "Tools",
-    featured: false,
-    description:
-      "A real-time weather application fetching data via weather API with city search autocomplete, 5-day forecast cards, and dynamic weather condition backgrounds.",
-    highlights: [
-      "Real-time OpenWeather API integration",
-      "Dynamic background changes according to weather condition",
-      "Hourly temperature graph and humidity indicators",
-    ],
-    image: "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=800&q=80",
-    icon: "CloudSun",
-    gradient: ["#0EA5E9", "#22D3EE"],
-    tech: ["JavaScript", "REST API", "CSS3"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
-  },
-  {
-    id: 7,
-    title: "TaskFlow Productivity",
-    category: "Tools",
-    featured: false,
-    description:
-      "An advanced task manager with priority flags, category tags, local storage persistence, and drag-and-drop reordering.",
-    highlights: [
-      "Local storage state persistence across sessions",
-      "Filter tasks by status: All, Active, Completed",
-      "Progress bar indicating daily completion percentage",
-    ],
-    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=800&q=80",
-    icon: "ListChecks",
-    gradient: ["#10B981", "#3B82F6"],
-    tech: ["React", "JavaScript", "Tailwind CSS"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
-  },
-  {
-    id: 8,
-    title: "Apex E-Commerce Kit",
-    category: "E-Commerce",
-    featured: true,
-    description:
-      "A premium UI kit for modern online stores with product card variants, search filters, quick-view modal, and slide-over cart drawer.",
-    highlights: [
-      "Quick view product preview modal",
-      "Responsive filter sidebar for desktop and mobile",
-      "Smooth cart slide-over animation",
-    ],
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=800&q=80",
-    icon: "ShoppingBag",
-    gradient: ["#EC4899", "#8B5CF6"],
-    tech: ["React", "Tailwind CSS", "Framer Motion"],
-    github: "https://github.com/rustamov-islom",
-    demo: "https://example.com",
+    tech: ["React.js", "Tailwind CSS", "JavaScript", "Framer Motion"],
+    demoUrl: "https://example.com/texlogiya-demo", // [Editable placeholder]
+    githubUrl: "https://github.com/rustamov-islom/texlogiya", // [Editable placeholder]
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80",
+    gradient: "from-purple-500/20 to-blue-600/20",
+    accentColor: "#8B5CF6",
   },
 ];
 
 export const certificates = [
   {
-    id: 1,
+    id: "mars-hackathon-2026",
     title: "Mars Hackathon Participant Sertifikati (Top 1)",
     issuer: "Mars IT School & IT Park Uzbekistan",
     date: "16.08.2026",
     image: "/certificates/mars-hackathon.png",
-    skills: ["Top 1 Winner", "React.js", "Mars Hackathon 2026", "UI/UX Architecture"],
+    skills: ["Top 1 Winner", "React.js", "Mars Hackathon", "Frontend Engineering"],
     credentialUrl: "/certificates/mars-hackathon.png",
-    badgeColor: "#8B5CF6",
-    imageGradient: ["#8B5CF6", "#EC4899"],
+    badge: "Verified Award",
     description:
-      "Mars Hackathon Avgust 2026 tanlov-saralash bosqichida faol ishtirok etgani va eng yuqori Top 1 darajasini egallagani uchun taqdirlandi (CEO Ruslan Rafikovich - Mars IT School).",
+      "Awarded for outstanding active participation and achieving Top 1 standing in the Mars Hackathon August 2026 selection stage (CEO Ruslan Rafikovich - Mars IT School).",
+    isReal: true,
   },
   {
-    id: 2,
-    title: "Frontend Web Development Specialist",
-    issuer: "IT Academy & Coursera",
-    date: "2025",
-    skills: ["HTML5", "CSS3", "JavaScript ES6+", "Responsive UI"],
-    credentialUrl: "https://coursera.org",
-    badgeColor: "#3B82F6",
-    imageGradient: ["#3B82F6", "#60A5FA"],
+    id: "placeholder-cert-1",
+    title: "Modern Web & Frontend Architecture [Placeholder]",
+    issuer: "Verified Academy / Institution [Placeholder]",
+    date: "Upcoming / In Progress",
+    image: null,
+    skills: ["React.js", "JavaScript ES6+", "UI/UX Systems"],
+    credentialUrl: "#",
+    badge: "Placeholder Slot",
     description:
-      "Verified mastery of semantic markup, CSS Grid & Flexbox, JavaScript DOM manipulation, and cross-browser responsive web design principles.",
+      "Editable slot for upcoming certification. Add your official certificate image and verification link here.",
+    isReal: false,
   },
   {
-    id: 3,
-    title: "React.js & Modern Frontend Architecture",
-    issuer: "Udemy & NextLevel",
-    date: "2025",
-    skills: ["React.js", "State Management", "Hooks", "Component Design"],
-    credentialUrl: "https://udemy.com",
-    badgeColor: "#8B5CF6",
-    imageGradient: ["#8B5CF6", "#A78BFA"],
+    id: "placeholder-cert-2",
+    title: "AI-Powered Frontend Engineering [Placeholder]",
+    issuer: "Professional Course / Workshop [Placeholder]",
+    date: "Upcoming / In Progress",
+    image: null,
+    skills: ["AI Coding Tools", "Tailwind CSS", "3D Web"],
+    credentialUrl: "#",
+    badge: "Placeholder Slot",
     description:
-      "Advanced React.js certification covering custom hooks, Context API, component lifecycle, performance optimization, and clean state design.",
-  },
-  {
-    id: 4,
-    title: "JavaScript Algorithms & Data Structures",
-    issuer: "freeCodeCamp",
-    date: "2024",
-    skills: ["Algorithm Logic", "Data Structures", "ES6 Features", "OOP"],
-    credentialUrl: "https://freecodecamp.org",
-    badgeColor: "#06B6D4",
-    imageGradient: ["#06B6D4", "#22D3EE"],
-    description:
-      "Comprehensive 300-hour certification covering functional programming, data structure algorithms, object-oriented logic, and ES6+ standards.",
+      "Editable slot for upcoming certification. Add your official certificate image and verification link here.",
+    isReal: false,
   },
 ];
 
 export const socials = [
   { name: "GitHub", url: "https://github.com/rustamov-islom", icon: "Github" },
-  { name: "Telegram", url: "https://t.me/rustamov_islom", icon: "Send" },
-  { name: "Instagram", url: "https://instagram.com/rustamov_islom", icon: "Instagram" },
-  { name: "LinkedIn", url: "https://linkedin.com/in/rustamov-islom", icon: "Linkedin" },
+  { name: "Telegram", url: "https://t.me/rustamov_islom", icon: "Telegram" },
+  { name: "LinkedIn", url: "https://linkedin.com/in/rustamov-islom", icon: "Linkedin" }, // [Placeholder]
+  { name: "Instagram", url: "https://instagram.com/rustamov_islom", icon: "Instagram" }, // [Placeholder]
 ];
 
 export const navLinks = [
-  { labelKey: "home", href: "#home" },
-  { labelKey: "about", href: "#about" },
-  { labelKey: "skills", href: "#skills" },
-  { labelKey: "experience", href: "#experience" },
-  { labelKey: "projects", href: "#projects" },
-  { labelKey: "certificates", href: "#certificates" },
-  { labelKey: "contact", href: "#contact" },
+  { id: "home", labelKey: "home", href: "#home" },
+  { id: "about", labelKey: "about", href: "#about" },
+  { id: "skills", labelKey: "skills", href: "#skills" },
+  { id: "projects", labelKey: "projects", href: "#projects" },
+  { id: "terminal", labelKey: "terminal", href: "#terminal" },
+  { id: "games", labelKey: "games", href: "#games" },
+  { id: "certificates", labelKey: "certificates", href: "#certificates" },
+  { id: "contact", labelKey: "contact", href: "#contact" },
 ];

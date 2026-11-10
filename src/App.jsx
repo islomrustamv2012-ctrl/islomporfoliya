@@ -1,37 +1,41 @@
 import { useState, useEffect } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import CustomCursor from "./components/CustomCursor";
+import ScrollProgress from "./components/ScrollProgress";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Skills from "./components/Skills";
-import Experience from "./components/Experience";
 import Projects from "./components/Projects";
+import DeveloperTerminal from "./components/DeveloperTerminal";
+import MiniGames from "./components/MiniGames";
 import Certificates from "./components/Certificates";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import BackToTop from "./components/BackToTop";
-import AIChatWidget from "./components/AIChatWidget";
+import AIAssistant from "./components/AIAssistant";
 import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./context/ThemeContext";
 import { LanguageProvider } from "./context/LanguageContext";
 
 function PortfolioApp() {
   return (
-    <div className="relative min-h-screen transition-colors duration-300">
+    <div className="relative min-h-screen bg-cyber-dark text-slate-100 transition-colors duration-300">
+      <ScrollProgress />
       <Navbar />
-      <main>
+      <main id="main-content">
         <Hero />
         <About />
         <Skills />
-        <Experience />
         <Projects />
+        <DeveloperTerminal />
+        <MiniGames />
         <Certificates />
         <Contact />
       </main>
       <Footer />
       <BackToTop />
-      <AIChatWidget />
+      <AIAssistant />
     </div>
   );
 }
@@ -45,7 +49,7 @@ function AppContent() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 1200);
+    }, 1100);
 
     const syncPath = () => setCurrentPath(window.location.pathname);
     window.addEventListener("popstate", syncPath);
@@ -56,7 +60,7 @@ function AppContent() {
     };
   }, []);
 
-  const isUnknownRoute = currentPath !== "/" && currentPath !== "";
+  const isUnknownRoute = currentPath !== "/" && currentPath !== "" && !currentPath.startsWith("/#");
 
   return (
     <>

@@ -1,12 +1,12 @@
 {
   "name": "portfolio",
   "private": true,
-  "version": "0.0.0", 
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "oxlint",
+    "lint": "oxlint src",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -14,7 +14,8 @@
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.35.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "three": "^0.187.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

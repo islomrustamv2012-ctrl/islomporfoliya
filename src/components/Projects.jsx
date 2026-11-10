@@ -1,217 +1,255 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Github,
-  Gift,
-  Truck,
-  Clock,
-  Cpu,
-  UserRound,
-  CloudSun,
-  ListChecks,
-  ShoppingBag,
-  Sparkles,
+  ExternalLink,
+  GithubIcon,
   Layers,
   Eye,
-} from "lucide-react";
+} from "./Icons";
 import { projects } from "../data/portfolioData";
 import { useLanguage } from "../context/LanguageContext";
 import ProjectModal from "./ProjectModal";
+import { playHoverSound, playClickSound } from "../utils/sound";
 
-const iconMap = {
-  Gift,
-  Truck,
-  Clock,
-  Cpu,
-  UserRound,
-  CloudSun,
-  ListChecks,
-  ShoppingBag,
-};
+// 3D Tilt Card Component
+function TiltProjectCard({ project, onSelect }) {
+  const { t } = useLanguage();
+  const cardRef = useRef(null);
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
 
-const categories = ["All", "E-Commerce", "Web Apps", "Tools"];
+  const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotX = -((y - centerY) / centerY) * 7;
+    const rotY = ((x - centerX) / centerX) * 7;
+    setRotateX(rotX);
+    setRotateY(rotY);
+  };
 
-function ProjectThumb({ project }) {
-  const Icon = iconMap[project.icon] || Sparkles;
-  const [from, to] = project.gradient;
+  const handleMouseLeave = () => {
+    setRotateX(0);
+    setRotateY(0);
+  };
 
-  if (project.image) {
-    return (
-      <div className="relative h-full w-full overflow-hidden bg-base-900">
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.4 }}
+      style={{
+        transformStyle: "preserve-3d",
+        transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+      }}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={playHoverSound}
+      className="group relative glass-card rounded-3xl overflow-hidden border border-white/10 hover:border-cyber-cyan/40 transition-all duration-300 flex flex-col justify-between"
+    >
+      {/* Top Banner & Image */}
+      <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-slate-900">
         <img
           src={project.image}
           alt={project.title}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-base-950 via-base-950/40 to-transparent opacity-80" />
-      </div>
-    );
-  }
+        <div className="absolute inset-0 bg-gradient-to-t from-cyber-card via-cyber-card/30 to-transparent" />
 
-  return (
-    <div
-      className="relative flex h-full w-full items-center justify-center overflow-hidden"
-      style={{
-        background: `linear-gradient(135deg, ${from}33, ${to}33)`,
-      }}
-    >
-      <div className="absolute inset-0 bg-grid-pattern bg-[size:20px_20px] opacity-25" />
-      <div
-        className="absolute -right-8 -top-8 h-32 w-32 rounded-full blur-2xl opacity-40"
-        style={{ background: to }}
-      />
-      <div
-        className="absolute -bottom-10 -left-10 h-36 w-36 rounded-full blur-2xl opacity-30"
-        style={{ background: from }}
-      />
-      <div
-        className="relative flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
-        style={{ background: `linear-gradient(135deg, ${from}, ${to})` }}
-      >
-        <Icon size={28} className="text-white" />
+        {/* Category & Badge pills */}
+        <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
+          <span className="px-3 py-1 rounded-full text-xs font-mono font-medium bg-cyber-card/85 border border-white/10 text-slate-300 backdrop-blur-md">
+            {project.category}
+          </span>
+          <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-cyber-cyan/20 border border-cyber-cyan/40 text-cyber-cyan backdrop-blur-md">
+            {project.badge}
+          </span>
+        </div>
+
+        {/* Quick View trigger overlay button */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-cyber-dark/40 backdrop-blur-[2px]">
+          <button
+            onClick={() => {
+              playClickSound();
+              onSelect(project);
+            }}
+            className="inline-flex items-center gap-2 rounded-xl bg-cyber-cyan text-slate-950 px-4 py-2 text-xs font-mono font-bold shadow-glow-cyan hover:scale-105 transition-transform"
+          >
+            <Eye size={15} />
+            <span>{t.projects.details}</span>
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Card Body */}
+      <div className="p-6 sm:p-7 flex flex-col justify-between flex-1">
+        <div>
+          <h3 className="font-display font-bold text-xl sm:text-2xl text-white mb-2 group-hover:text-cyber-cyan transition-colors">
+            {project.title}
+          </h3>
+          <p className="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4 line-clamp-2">
+            {project.description}
+          </p>
+
+          {/* Tech Badges */}
+          <div className="flex flex-wrap gap-1.5 mb-6">
+            {project.tech.map((item) => (
+              <span
+                key={item}
+                className="px-2.5 py-0.5 rounded-md text-[11px] font-mono bg-white/5 border border-white/10 text-slate-300"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom CTA Row */}
+        <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+          <button
+            onClick={() => {
+              playClickSound();
+              onSelect(project);
+            }}
+            className="text-xs font-mono text-cyber-cyan hover:underline flex items-center gap-1"
+          >
+            {t.projects.details} &rarr;
+          </button>
+
+          <div className="flex items-center gap-2">
+            <a
+              href={project.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={playClickSound}
+              title={t.projects.github}
+              className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+            >
+              <GithubIcon size={16} />
+            </a>
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={playClickSound}
+              title={t.projects.liveDemo}
+              className="p-2 rounded-xl bg-cyber-cyan/15 border border-cyber-cyan/40 text-cyber-cyan hover:bg-cyber-cyan/25 transition-colors"
+            >
+              <ExternalLink size={16} />
+            </a>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
 export default function Projects() {
   const { t } = useLanguage();
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
 
+  const categories = [
+    { key: "all", label: t.projects.categories.all },
+    { key: "E-Commerce", label: t.projects.categories.ecommerce },
+    { key: "Web Apps", label: t.projects.categories.webapps },
+    { key: "Tools", label: t.projects.categories.tools },
+  ];
+
   const filteredProjects =
-    activeCategory === "All"
+    activeCategory === "all"
       ? projects
       : projects.filter((p) => p.category === activeCategory);
 
   return (
-    <section id="projects" className="relative overflow-hidden py-28">
-      {/* Background Radial Glow */}
-      <div className="pointer-events-none absolute inset-0 bg-dots-pattern opacity-20 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent)]" />
+    <section id="projects" className="relative py-24 sm:py-32 overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-cyber-cyan/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-          className="mb-12 text-center"
-        >
-          <span className="glass inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-mono uppercase tracking-[0.2em] text-accent mb-3">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 rounded-full px-3.5 py-1 text-xs font-mono uppercase tracking-widest text-cyber-cyan bg-cyber-card border border-cyber-cyan/30 mb-4"
+          >
             <Layers size={14} />
-            {t.projects.sectionBadge}
-          </span>
-          <h2 className="font-display text-3xl font-bold sm:text-4xl md:text-5xl">
-            {t.projects.title} <span className="text-gradient">{t.projects.titleHighlight}</span>
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-white/60 text-sm sm:text-base">
+            <span>{t.projects.badge}</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+          >
+            {t.projects.title} <span className="text-gradient">{t.projects.highlightTitle}</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-slate-400 text-sm sm:text-base leading-relaxed"
+          >
             {t.projects.subtitle}
-          </p>
+          </motion.p>
+        </div>
 
-          {/* Category Filter Tabs (Min 44px touch targets) */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5">
-            {categories.map((cat) => (
+        {/* Category Filters */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12">
+          {categories.map((cat) => {
+            const isActive = activeCategory === cat.key;
+            return (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`relative min-h-[44px] rounded-full px-5 py-2 text-xs font-semibold transition-all duration-300 focus-ring ${
-                  activeCategory === cat
-                    ? "bg-gradient-to-r from-primary to-accent text-white shadow-glow"
-                    : "glass text-white/70 hover:border-accent/40 hover:text-white"
+                key={cat.key}
+                onClick={() => {
+                  playClickSound();
+                  setActiveCategory(cat.key);
+                }}
+                onMouseEnter={playHoverSound}
+                className={`relative px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-mono transition-all duration-300 ${
+                  isActive
+                    ? "bg-gradient-to-r from-cyber-cyan/20 to-cyber-purple/20 text-cyber-cyan border border-cyber-cyan/50 shadow-glow-cyan"
+                    : "bg-white/5 text-slate-400 border border-white/10 hover:border-white/20 hover:text-white"
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
-            ))}
-          </div>
-        </motion.div>
+            );
+          })}
+        </div>
 
-        {/* Bento Grid Layout */}
-        <motion.div layout className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Projects Grid */}
+        <motion.div
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
           <AnimatePresence>
-            {filteredProjects.map((project, i) => (
-              <motion.article
+            {filteredProjects.map((project) => (
+              <TiltProjectCard
                 key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className={`group glass-card relative overflow-hidden rounded-3xl flex flex-col justify-between border border-white/10 ${
-                  project.featured && activeCategory === "All" && i === 0
-                    ? "sm:col-span-2 lg:col-span-2"
-                    : ""
-                }`}
-              >
-                <div>
-                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-3xl">
-                    <ProjectThumb project={project} />
-
-                    {/* Category Pill */}
-                    <div className="absolute top-4 left-4 z-10">
-                      <span className="glass rounded-full px-3 py-1 text-[11px] font-semibold text-white/90 backdrop-blur-md">
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {/* Hover Action Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-3 bg-base-950/75 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
-                      <button
-                        onClick={() => setSelectedProject(project)}
-                        className="flex h-11 min-w-[44px] items-center gap-2 rounded-full bg-accent px-4 text-xs font-semibold text-base-950 transition-transform hover:scale-105 focus-ring"
-                      >
-                        <Eye size={16} />
-                        {t.projects.quickView}
-                      </button>
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-transform hover:scale-110 hover:bg-white/20 focus-ring"
-                        aria-label={`${project.title} GitHub repository`}
-                      >
-                        <Github size={18} />
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="p-6">
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <h3 className="font-display text-lg font-bold text-white group-hover:text-accent transition-colors">
-                        {project.title}
-                      </h3>
-                    </div>
-                    <p className="text-xs sm:text-sm leading-relaxed text-white/60 line-clamp-3">
-                      {project.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-6 pt-0 flex flex-wrap items-center justify-between gap-3 border-t border-white/5 mt-4">
-                  <div className="flex flex-wrap gap-1.5 pt-3">
-                    {project.tech.map((t) => (
-                      <span
-                        key={t}
-                        className="rounded-md border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-mono text-white/70"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() => setSelectedProject(project)}
-                    className="pt-3 text-xs font-semibold text-accent hover:underline flex items-center gap-1 focus-ring"
-                  >
-                    {t.projects.details}
-                  </button>
-                </div>
-              </motion.article>
+                project={project}
+                onSelect={setSelectedProject}
+              />
             ))}
           </AnimatePresence>
         </motion.div>
+
       </div>
 
-      {/* Interactive Project Details Modal */}
+      {/* Project Details Modal */}
       <ProjectModal
         project={selectedProject}
         isOpen={Boolean(selectedProject)}

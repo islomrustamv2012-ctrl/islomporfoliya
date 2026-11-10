@@ -1,257 +1,256 @@
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowRight, Mail, ChevronDown, Sparkles } from "lucide-react";
-import { profile, stats } from "../data/portfolioData";
+import { motion } from "framer-motion";
+import { ArrowRight, Mail, Download, Sparkles, ChevronDown } from "./Icons";
+import { profile } from "../data/portfolioData";
 import { useLanguage } from "../context/LanguageContext";
-import BlobBackground from "./BlobBackground";
-import ParticlesBackground from "./ParticlesBackground";
-
-function useTypewriter(words, { typingSpeed = 90, deletingSpeed = 45, pause = 1400 } = {}) {
-  const [index, setIndex] = useState(0);
-  const [text, setText] = useState("");
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    if (!words || words.length === 0) return;
-    const current = words[index % words.length];
-    let timeout;
-
-    if (!deleting && text.length < current.length) {
-      timeout = setTimeout(() => setText(current.slice(0, text.length + 1)), typingSpeed);
-    } else if (!deleting && text.length === current.length) {
-      timeout = setTimeout(() => setDeleting(true), pause);
-    } else if (deleting && text.length > 0) {
-      timeout = setTimeout(() => setText(current.slice(0, text.length - 1)), deletingSpeed);
-    } else if (deleting && text.length === 0) {
-      setDeleting(false);
-      setIndex((i) => i + 1);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [text, deleting, index, words, typingSpeed, deletingSpeed, pause]);
-
-  return text;
-}
-
-function Counter({ value, suffix }) {
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    let frame;
-    const duration = 1400;
-    const start = performance.now();
-
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.floor(eased * value));
-      if (progress < 1) frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [value]);
-
-  return (
-    <span className="font-display text-3xl font-bold text-white dark:text-white light:text-slate-900 sm:text-4xl">
-      {display}
-      {suffix}
-    </span>
-  );
-}
+import Hero3DCanvas from "./Hero3DCanvas";
+import { playHoverSound, playClickSound } from "../utils/sound";
 
 export default function Hero() {
   const { t } = useLanguage();
-  const typed = useTypewriter(t.hero.roles || profile.roles);
 
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]), { stiffness: 150, damping: 20 });
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), { stiffness: 150, damping: 20 });
+  const handleDownloadCV = () => {
+    playClickSound();
+    // Create and download a structured developer profile document or open clean printable version
+    const cvText = `
+=====================================================
+ISLOM RUSTAMOV — FRONTEND DEVELOPER & REACT DEVELOPER
+=====================================================
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mx.set((e.clientX - rect.left) / rect.width - 0.5);
-    my.set((e.clientY - rect.top) / rect.height - 0.5);
+Location: Tashkent, Uzbekistan
+Role: Frontend Developer / React Developer
+Interests: AI, Modern Web Technologies, UI/UX Design
+Email: ${profile.email}
+Phone: ${profile.phone}
+Portfolio: https://github.com/rustamov-islom
+
+TECHNICAL SKILLS:
+- Frontend Core: HTML5, CSS3, JavaScript (ES6+), React.js
+- Styling & UI: Tailwind CSS, Responsive Web Design, Framer Motion
+- Tools: Git, GitHub, VS Code, Vite
+- Innovation: AI Coding Tools, UI/UX Design Systems, 3D Web Experiences
+
+FEATURED PROJECTS:
+1. Toystore — Dynamic E-commerce storefront with stateful cart & filters.
+2. Foodtruck — Interactive culinary brand with responsive menus & booking.
+3. Time — Dark-mode productivity studio with world clock & stopwatch.
+4. Texlogiya — Futuristic IT tech showcase platform with Bento Grid layouts.
+
+HONORS & CREDENTIALS:
+- Mars Hackathon 2026: 1st Place Participant Sertifikat (Mars IT School & IT Park)
+
+=====================================================
+`;
+    const blob = new Blob([cvText.trim()], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Islom-Rustamov-CV.txt";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
-
-  const scrollTo = (href) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const statLabels = [
-    t.hero.stats.years,
-    t.hero.stats.projects,
-    t.hero.stats.tech,
-    t.hero.stats.lines,
-  ];
 
   return (
     <section
       id="home"
-      className="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16 sm:pt-32"
+      className="relative min-h-[92vh] flex items-center justify-center overflow-hidden pt-28 pb-16 lg:py-32"
     >
-      <BlobBackground variant="hero" />
-      <ParticlesBackground />
+      {/* Background cyber radial glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-cyber-cyan/10 via-cyber-purple/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-14 px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-10">
-        {/* Text column */}
-        <div>
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Column: Typography & CTAs */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium text-white/80 dark:text-white/80 light:text-slate-800"
+            initial={{ opacity: 0, x: -35 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left"
           >
-            <Sparkles size={14} className="text-accent" />
-            {t.hero.badge}
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-display text-4xl font-bold leading-[1.08] tracking-tight text-white dark:text-white light:text-slate-900 sm:text-5xl md:text-6xl"
-          >
-            {t.hero.greeting}{" "}
-            <span className="text-gradient bg-[length:200%_auto] animate-gradient-x">
-              {profile.name}
-            </span>
-          </motion.h1>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="mt-4 flex h-9 items-center font-mono text-lg text-white/80 dark:text-white/80 light:text-slate-700 sm:text-xl"
-          >
-            <span className="mr-2 text-accent">{t.hero.rolePrefix}</span>
-            {typed}
-            <span className="ml-1 inline-block h-5 w-[2px] animate-blink bg-accent" />
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="mt-6 max-w-xl text-base leading-relaxed text-white/60 dark:text-white/60 light:text-slate-600 sm:text-lg"
-          >
-            {t.hero.bio}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.45 }}
-            className="mt-9 flex flex-wrap items-center gap-4"
-          >
-            <button
-              onClick={() => scrollTo("#projects")}
-              className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-primary via-secondary to-accent bg-[length:200%_auto] px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition-all duration-300 hover:bg-right hover:shadow-glow-purple focus-ring"
+            {/* Availability Pill */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-xs font-mono font-medium tracking-wider text-cyber-cyan bg-cyber-card/80 border border-cyber-cyan/30 backdrop-blur-md mb-6 shadow-glow-cyan"
             >
-              {t.hero.viewProjects}
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-            </button>
-            <button
-              onClick={() => scrollTo("#contact")}
-              className="glass inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-white/90 dark:text-white/90 light:text-slate-900 transition-all duration-300 hover:border-accent/50 focus-ring"
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyber-cyan opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyber-cyan"></span>
+              </span>
+              <span>{t.hero.badge}</span>
+            </motion.div>
+
+            {/* Greeting */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-xs sm:text-sm font-mono uppercase tracking-[0.25em] text-cyber-cyan/90 mb-3 flex items-center gap-2"
             >
-              <Mail size={16} />
-              {t.hero.contactMe}
-            </button>
+              <Sparkles size={15} className="text-cyber-cyan animate-pulse" />
+              <span>{t.hero.greeting}</span>
+            </motion.p>
+
+            {/* Giant Futuristic Name */}
+            <motion.h1
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-4 leading-[1.08]"
+            >
+              <span className="text-gradient">ISLOM</span> <br />
+              <span className="text-white drop-shadow-sm">RUSTAMOV</span>
+            </motion.h1>
+
+            {/* Roles */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.6 }}
+              className="flex items-center gap-2 text-sm sm:text-base md:text-lg font-mono text-cyber-muted mb-6"
+            >
+              <span className="text-cyber-cyan font-bold">&gt;</span>
+              <span className="text-slate-200">{t.hero.role}</span>
+            </motion.div>
+
+            {/* Introduction Quote */}
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="max-w-xl text-base sm:text-lg text-slate-300 leading-relaxed font-light mb-8 lg:mb-10"
+            >
+              &ldquo;{t.hero.intro}&rdquo;
+            </motion.p>
+
+            {/* Action Buttons */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4 w-full sm:w-auto"
+            >
+              {/* Explore My Work */}
+              <a
+                href="#projects"
+                onMouseEnter={playHoverSound}
+                onClick={playClickSound}
+                className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-cyber-cyan via-cyber-blue to-cyber-purple px-6 py-3.5 text-sm font-semibold text-slate-950 transition-all duration-300 hover:shadow-glow-cyan hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <span>{t.hero.explore}</span>
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </a>
+
+              {/* Let's Talk */}
+              <a
+                href="#contact"
+                onMouseEnter={playHoverSound}
+                onClick={playClickSound}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 backdrop-blur-md px-6 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:border-cyber-cyan/50 hover:bg-cyber-cyan/10 hover:text-cyber-cyan active:scale-[0.98]"
+              >
+                <Mail size={16} />
+                <span>{t.hero.talk}</span>
+              </a>
+
+              {/* Download CV */}
+              <button
+                onClick={handleDownloadCV}
+                onMouseEnter={playHoverSound}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-cyber-purple/40 bg-cyber-purple/10 backdrop-blur-md px-5 py-3.5 text-sm font-medium text-cyber-purple hover:bg-cyber-purple/20 hover:border-cyber-purple transition-all duration-300 active:scale-[0.98]"
+              >
+                <Download size={16} />
+                <span>{t.hero.downloadCv}</span>
+              </button>
+            </motion.div>
           </motion.div>
 
+          {/* Right Column: Interactive 3D Sphere & Floating Labels */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+            className="lg:col-span-5 relative flex items-center justify-center"
           >
-            {stats.map((s, idx) => (
-              <div key={s.label} className="glass-card rounded-2xl px-4 py-4 text-center">
-                <Counter value={s.value} suffix={s.suffix} />
-                <p className="mt-1 text-[11px] uppercase tracking-wider text-white/50 dark:text-white/50 light:text-slate-500 font-mono">
-                  {statLabels[idx] || s.label}
-                </p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Image / Avatar column */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={() => {
-            mx.set(0);
-            my.set(0);
-          }}
-          style={{ perspective: 1000 }}
-          className="relative mx-auto w-full max-w-sm"
-        >
-          <motion.div
-            animate={{ y: [0, -16, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className="relative"
-          >
-            <div className="absolute -inset-4 rounded-[2.5rem] bg-gradient-to-br from-primary via-secondary to-accent opacity-30 blur-2xl" />
-            <div className="gradient-border glass-strong relative aspect-square overflow-hidden rounded-[2.5rem] p-2">
-              <div className="relative h-full w-full overflow-hidden rounded-[2rem] bg-gradient-to-br from-base-900 to-base-800 dark:from-base-900 dark:to-base-800 light:from-slate-100 light:to-slate-200">
-                <div className="flex h-full w-full items-center justify-center">
-                  <span className="font-display text-8xl font-bold text-gradient">
-                    RI
-                  </span>
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-base-950/80 via-transparent to-transparent dark:from-base-950/80 light:from-white/40" />
-              </div>
+            {/* The 3D Canvas */}
+            <div className="relative z-10 w-full flex items-center justify-center">
+              <Hero3DCanvas />
             </div>
 
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              className="pointer-events-none absolute -inset-8 rounded-full border border-dashed border-white/10 dark:border-white/10 light:border-slate-300"
-            />
-
+            {/* Floating Futuristic Tech Badges */}
+            {/* 1. React.js */}
             <motion.div
               animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="glass absolute -left-8 top-8 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 dark:text-white/80 light:text-slate-800 shadow-lg"
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -top-2 left-4 sm:left-12 z-20 glass-panel rounded-xl px-3.5 py-1.5 shadow-lg border border-cyan-400/30 flex items-center gap-2"
             >
-              ⚛️ React.js
+              <span className="h-2 w-2 rounded-full bg-cyan-400 animate-ping" />
+              <span className="text-xs font-mono font-semibold text-cyan-300">
+                {t.hero.floatingLabels.react}
+              </span>
             </motion.div>
+
+            {/* 2. JavaScript */}
             <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="glass absolute -right-6 top-1/2 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 dark:text-white/80 light:text-slate-800 shadow-lg"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 5.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+              className="absolute top-1/4 -right-2 sm:right-4 z-20 glass-panel rounded-xl px-3.5 py-1.5 shadow-lg border border-yellow-400/30 flex items-center gap-2"
             >
-              🎨 Tailwind
+              <span className="h-2 w-2 rounded-full bg-yellow-400" />
+              <span className="text-xs font-mono font-semibold text-yellow-300">
+                {t.hero.floatingLabels.javascript}
+              </span>
             </motion.div>
+
+            {/* 3. AI Tools */}
             <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-              className="glass absolute -bottom-4 left-10 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-mono text-white/80 dark:text-white/80 light:text-slate-800 shadow-lg"
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+              className="absolute bottom-16 -left-3 sm:left-4 z-20 glass-panel rounded-xl px-3.5 py-1.5 shadow-lg border border-purple-400/30 flex items-center gap-2"
             >
-              🤖 AI Tools
+              <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
+              <span className="text-xs font-mono font-semibold text-purple-300">
+                {t.hero.floatingLabels.aiTools}
+              </span>
+            </motion.div>
+
+            {/* 4. Frontend Development */}
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.6 }}
+              className="absolute -bottom-4 right-6 sm:right-16 z-20 glass-panel rounded-xl px-3.5 py-1.5 shadow-lg border border-blue-400/30 flex items-center gap-2"
+            >
+              <span className="h-2 w-2 rounded-full bg-blue-400" />
+              <span className="text-xs font-mono font-semibold text-blue-300">
+                {t.hero.floatingLabels.frontend}
+              </span>
             </motion.div>
           </motion.div>
+
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="mt-14 sm:mt-16 flex flex-col items-center justify-center gap-2"
+        >
+          <a
+            href="#about"
+            onMouseEnter={playHoverSound}
+            className="flex flex-col items-center text-xs font-mono text-slate-400 hover:text-cyber-cyan transition-colors"
+          >
+            <span>{t.hero.scrollDown}</span>
+            <ChevronDown size={18} className="animate-bounce mt-1 text-cyber-cyan" />
+          </a>
         </motion.div>
       </div>
-
-      <motion.button
-        onClick={() => scrollTo("#about")}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-white/40 dark:text-white/40 light:text-slate-400 transition-colors hover:text-white focus-ring"
-        aria-label="Scroll to About section"
-      >
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity }}>
-          <ChevronDown size={26} />
-        </motion.div>
-      </motion.button>
     </section>
   );
 }

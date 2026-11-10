@@ -1,77 +1,63 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function CustomCursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
+  const [pos, setPos] = useState({ x: -100, y: -100 });
   const [isPointer, setIsPointer] = useState(false);
-  const [hidden, setHidden] = useState(true);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    const isDesktop =
-      window.matchMedia("(min-width: 768px)").matches &&
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    // Check for touch device or reduced motion
+    if (
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+    ) {
+      setIsTouchDevice(true);
+      return;
+    }
 
-    if (!isDesktop) return;
+    const handleMouseMove = (e) => {
+      setPos({ x: e.clientX, y: e.clientY });
 
-    document.body.classList.add("custom-cursor-active");
-
-    let ringX = 0;
-    let ringY = 0;
-    let mouseX = 0;
-    let mouseY = 0;
-    let raf;
-
-    const handleMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      setHidden(false);
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
-      }
+      // Check if target is clickable
       const target = e.target;
-      setIsPointer(
-        !!target.closest("a, button, input, textarea, [data-cursor-pointer]")
+      const isClickable = Boolean(
+        target.closest("a, button, input, textarea, select, [role='button'], canvas")
       );
+      setIsPointer(isClickable);
     };
 
-    const animateRing = () => {
-      ringX += (mouseX - ringX) * 0.15;
-      ringY += (mouseY - ringY) * 0.15;
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX}px, ${ringY}px)`;
-      }
-      raf = requestAnimationFrame(animateRing);
-    };
-
-    window.addEventListener("mousemove", handleMove);
-    raf = requestAnimationFrame(animateRing);
-
-    return () => {
-      document.body.classList.remove("custom-cursor-active");
-      window.removeEventListener("mousemove", handleMove);
-      cancelAnimationFrame(raf);
-    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  if (isTouchDevice) return null;
+
   return (
-    <div
-      className={`pointer-events-none fixed inset-0 z-[90] hidden md:block ${
-        hidden ? "opacity-0" : "opacity-100"
-      } transition-opacity duration-300`}
-      aria-hidden="true"
-    >
-      <div
-        ref={dotRef}
-        className="absolute left-0 top-0 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent"
+    <>
+      {/* Central Cyber Point */}
+      <motion.div
+        className="pointer-events-none fixed top-0 left-0 z-50 rounded-full bg-cyber-cyan shadow-glow-cyan"
+        style={{
+          width: isPointer ? 8 : 6,
+          height: isPointer ? 8 : 6,
+          transform: `translate(${pos.x - (isPointer ? 4 : 3)}px, ${pos.y - (isPointer ? 4 : 3)}px)`,
+          transition: "width 0.15s, height 0.15s",
+        }}
       />
-      <div
-        ref={ringRef}
-        className={`absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-[width,height,border-color] duration-200 ${
-          isPointer
-            ? "h-10 w-10 border-primary bg-primary/10"
-            : "h-7 w-7 border-white/30"
-        }`}
+
+      {/* Outer Tracking Gimbal Ring */}
+      <motion.div
+        className="pointer-events-none fixed top-0 left-0 z-50 rounded-full border border-cyber-cyan/40"
+        style={{
+          width: isPointer ? 38 : 26,
+          height: isPointer ? 38 : 26,
+          transform: `translate(${pos.x - (isPointer ? 19 : 13)}px, ${pos.y - (isPointer ? 19 : 13)}px)`,
+          transition: "transform 0.08s ease-out, width 0.2s, height 0.2s, border-color 0.2s",
+          backgroundColor: isPointer ? "rgba(0, 229, 255, 0.06)" : "transparent",
+        }}
       />
-    </div>
+    </>
   );
 }

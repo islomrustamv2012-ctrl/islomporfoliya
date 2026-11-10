@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,19 +8,30 @@ export default {
   theme: {
     extend: {
       colors: {
+        cyber: {
+          bg: "#050816",
+          dark: "#050816",
+          card: "#0B1020",
+          cardBorder: "rgba(0, 229, 255, 0.15)",
+          cyan: "#00E5FF",
+          blue: "#2563EB",
+          purple: "#8B5CF6",
+          violet: "#7C3AED",
+          white: "#F8FAFC",
+          muted: "#94A3B8",
+        },
         base: {
-          950: "#030712",
-          900: "#070c1a",
-          850: "#0b1222",
-          800: "#0c1424",
-          700: "#131e33",
+          950: "#050816",
+          900: "#0B1020",
+          850: "#0e152d",
+          800: "#131b38",
+          700: "#1b274e",
         },
         primary: {
-          DEFAULT: "#3B82F6",
-          50: "#eff6ff",
-          400: "#60a5fa",
-          500: "#3B82F6",
-          600: "#2563eb",
+          DEFAULT: "#00E5FF",
+          400: "#38bdf8",
+          500: "#00E5FF",
+          600: "#0284c7",
         },
         secondary: {
           DEFAULT: "#8B5CF6",
@@ -28,15 +40,10 @@ export default {
           600: "#7c3aed",
         },
         accent: {
-          DEFAULT: "#06B6D4",
+          DEFAULT: "#00E5FF",
           400: "#22d3ee",
-          500: "#06B6D4",
+          500: "#00E5FF",
           600: "#0891b2",
-        },
-        indigo: {
-          400: "#818cf8",
-          500: "#6366f1",
-          600: "#4f46e5",
         },
       },
       fontFamily: {
@@ -46,59 +53,43 @@ export default {
       },
       backgroundImage: {
         "grid-pattern":
-          "linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px)",
+          "linear-gradient(to right, rgba(0, 229, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 229, 255, 0.05) 1px, transparent 1px)",
         "dots-pattern":
-          "radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)",
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+          "radial-gradient(circle, rgba(0, 229, 255, 0.08) 1px, transparent 1px)",
+        "cyber-gradient":
+          "linear-gradient(135deg, rgba(0,229,255,0.15) 0%, rgba(139,92,246,0.15) 100%)",
       },
       animation: {
-        blob: "blob 14s infinite",
         float: "float 6s ease-in-out infinite",
         "float-slow": "float 9s ease-in-out infinite",
-        "spin-slow": "spin 18s linear infinite",
-        "spin-slower": "spin 30s linear infinite",
-        marquee: "marquee 28s linear infinite",
+        "spin-slow": "spin 20s linear infinite",
+        "spin-slower": "spin 40s linear infinite",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
-        "gradient-x": "gradient-x 6s ease infinite",
-        blink: "blink 1s step-end infinite",
         shimmer: "shimmer 2.5s infinite",
+        scanline: "scanline 8s linear infinite",
       },
       keyframes: {
-        blob: {
-          "0%, 100%": { transform: "translate(0px, 0px) scale(1)" },
-          "33%": { transform: "translate(30px, -50px) scale(1.1)" },
-          "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
-        },
         float: {
           "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-18px)" },
+          "50%": { transform: "translateY(-14px)" },
         },
         "pulse-glow": {
-          "0%, 100%": { opacity: 0.6, transform: "scale(1)" },
-          "50%": { opacity: 1, transform: "scale(1.05)" },
-        },
-        marquee: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        "gradient-x": {
-          "0%, 100%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-        },
-        blink: {
-          "0%, 100%": { opacity: 1 },
-          "50%": { opacity: 0 },
+          "0%, 100%": { opacity: "0.6", transform: "scale(1)" },
+          "50%": { opacity: "1", transform: "scale(1.04)" },
         },
         shimmer: {
           "100%": { transform: "translateX(100%)" },
         },
+        scanline: {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(1000%)" },
+        },
       },
       boxShadow: {
-        glow: "0 0 40px -10px rgba(59,130,246,0.5)",
-        "glow-purple": "0 0 40px -10px rgba(139,92,246,0.5)",
-        "glow-cyan": "0 0 40px -10px rgba(6,182,212,0.5)",
-        "glow-indigo": "0 0 40px -10px rgba(99,102,241,0.5)",
-        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+        "glow-cyan": "0 0 35px -5px rgba(0, 229, 255, 0.45)",
+        "glow-purple": "0 0 35px -5px rgba(139, 92, 246, 0.45)",
+        "glow-blue": "0 0 35px -5px rgba(37, 99, 235, 0.45)",
+        cyber: "0 8px 32px 0 rgba(0, 0, 0, 0.5)",
       },
     },
   },
